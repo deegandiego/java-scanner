@@ -32,10 +32,10 @@ public class App {
             name = in.nextLine();
             count++;
             if (count == 10) {
-                count=0;
+                count = 0;
 
                 clearScreen();
-                
+
                 System.out.println("O que está fazendo?! Aqui, deixe-me limpar a tela para você!");
 
                 // Await 2s
@@ -74,12 +74,19 @@ public class App {
 
         int numeroAleatorio = random.nextInt(100) + 1; // Gera um número aleatório entre 1 e 100
         int tentativas = 0;
-        int palpite = 0;
+        int palpite = -1;
 
         System.out.println("Já pensei em um número entre 1 e 100. Tente adivinhar!");
 
         while (palpite != numeroAleatorio) {
             System.out.print("Digite o seu palpite: ");
+
+            // Verifica se a entrada é um inteiro
+            while (!in.hasNextInt()) {
+                System.out.println("Por favor, digite um número válido.");
+                in.next();
+            }
+
             palpite = in.nextInt();
             tentativas++;
 
