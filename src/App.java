@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class App {
+    public static final int MAX_ATTEMPTS = 65;
+
     public static void clearScreen() {
         try {
             new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
@@ -18,6 +20,8 @@ public class App {
 
         Scanner in = new Scanner(System.in);
 
+        Player p = new Player();
+
         System.out.println("Este é meu programa Java Scanner.");
 
         // Await 2s
@@ -26,10 +30,10 @@ public class App {
 
         System.out.println("Como posso te chamar?");
 
-        String name = "";
+        p.setName("");
         int count = 0;
-        while (name.trim().isEmpty()) {
-            name = in.nextLine();
+        while (p.getName().trim().isEmpty()) {
+            p.setName(in.nextLine());
             count++;
             if (count == 10) {
                 count = 0;
@@ -48,7 +52,7 @@ public class App {
 
         }
 
-        System.out.println("Olá, " + name + ", vamos jogar \"adivinha\"? (s=sim, n=não)");
+        System.out.println("Olá, " + p.getName() + ", vamos jogar \"adivinha\"? (s=sim, n=não)");
 
         if (in.nextLine().toLowerCase().equals("n")) {
             GoodbyeFrame frame = new GoodbyeFrame();
@@ -73,17 +77,17 @@ public class App {
         Random random = new Random();
 
         int numeroAleatorio = random.nextInt(100) + 1;
-        int tentativas = 0;
-        int palpite = -1;
+        p.setAttempts(0);
+        p.setGuess(-1);
 
         System.out.println("Já pensei em um número entre 1 e 100. Tente adivinhar!");
 
         long inicioJogo = System.currentTimeMillis();
 
-        while (palpite != numeroAleatorio) {
-            tentativas++;
+        while (p.getGuess() != numeroAleatorio) {
+            p.sumAttempt(1);
 
-            if (tentativas < 65) {
+            if (p.getAttempts() < MAX_ATTEMPTS) {
                 System.out.print("Digite o seu palpite: ");
 
                 // Verifica se a entrada é um inteiro
@@ -92,25 +96,25 @@ public class App {
                     in.next();
                 }
 
-                palpite = in.nextInt();
+                p.setGuess(in.nextInt());
 
-                if (palpite < numeroAleatorio) {
+                if (p.getGuess() < numeroAleatorio) {
                     System.out.println("Tente um número maior.");
-                } else if (palpite > numeroAleatorio) {
+                } else if (p.getGuess() > numeroAleatorio) {
                     System.out.println("Tente um número menor.");
                 }
             } else {
-                palpite = numeroAleatorio;
+                p.setGuess(numeroAleatorio);
                 System.out.println();
                 System.out.println("Ei, o número que tinha pensado é: " + numeroAleatorio);
-                tentativas--;
+                p.sumAttempt(-1);
             }
 
-            if (palpite == numeroAleatorio) {
-                long duracaoJogo = System.currentTimeMillis() - inicioJogo;
+            if (p.getGuess() == numeroAleatorio) {
+                p.setDurationMs(System.currentTimeMillis() - inicioJogo);
                 System.out.println();
-                System.out.println("Parabéns, " + name + "!");
-                System.out.println("Você descobriu em " + tentativas + " tentativas!");
+                System.out.println("Parabéns, " + p.getName() + "!");
+                System.out.println("Você descobriu em " + p.getAttempts() + " tentativas!");
             }
         }
 
