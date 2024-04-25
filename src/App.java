@@ -72,30 +72,45 @@ public class App {
 
         Random random = new Random();
 
-        int numeroAleatorio = random.nextInt(100) + 1; // Gera um número aleatório entre 1 e 100
+        int numeroAleatorio = random.nextInt(100) + 1;
         int tentativas = 0;
         int palpite = -1;
 
         System.out.println("Já pensei em um número entre 1 e 100. Tente adivinhar!");
 
+        long inicioJogo = System.currentTimeMillis();
+
         while (palpite != numeroAleatorio) {
-            System.out.print("Digite o seu palpite: ");
-
-            // Verifica se a entrada é um inteiro
-            while (!in.hasNextInt()) {
-                System.out.println("Por favor, digite um número válido.");
-                in.next();
-            }
-
-            palpite = in.nextInt();
             tentativas++;
 
-            if (palpite < numeroAleatorio) {
-                System.out.println("Tente um número maior.");
-            } else if (palpite > numeroAleatorio) {
-                System.out.println("Tente um número menor.");
+            if (tentativas < 65) {
+                System.out.print("Digite o seu palpite: ");
+
+                // Verifica se a entrada é um inteiro
+                while (!in.hasNextInt()) {
+                    System.out.println("Por favor, digite um número válido.");
+                    in.next();
+                }
+
+                palpite = in.nextInt();
+
+                if (palpite < numeroAleatorio) {
+                    System.out.println("Tente um número maior.");
+                } else if (palpite > numeroAleatorio) {
+                    System.out.println("Tente um número menor.");
+                }
             } else {
-                System.out.println("Parabéns, " + name + "! Você acertou em " + tentativas + " tentativas!");
+                palpite = numeroAleatorio;
+                System.out.println();
+                System.out.println("Ei, o número que tinha pensado é: " + numeroAleatorio);
+                tentativas--;
+            }
+
+            if (palpite == numeroAleatorio) {
+                long duracaoJogo = System.currentTimeMillis() - inicioJogo;
+                System.out.println();
+                System.out.println("Parabéns, " + name + "!");
+                System.out.println("Você descobriu em " + tentativas + " tentativas!");
             }
         }
 
