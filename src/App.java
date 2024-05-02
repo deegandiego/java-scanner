@@ -1,9 +1,13 @@
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 public class App {
+    public static final String JSON_SRC = "resources/highscores.json";
+
     public static final int MAX_ATTEMPTS = 65;
 
     public static void clearScreen() {
@@ -115,6 +119,71 @@ public class App {
                 System.out.println();
                 System.out.println("Parabéns, " + p.getName() + "!");
                 System.out.println("Você descobriu em " + p.getAttempts() + " tentativas!");
+
+                System.out.println();
+                System.out.println("*** T O P   H I G H S C O R E S ***");
+                System.out.println();
+
+                try {
+                    List<Player> pList = HighscoreUtils.loadOrCreateHighscoreList();
+                    pList = HighscoreUtils.updateHighscoreList(pList, p);
+
+                    for (int i = 0; i < pList.size(); i++) {
+                        Player thisPlayer = pList.get(i);
+                        String ln0 = "", ln1 = "", ln2 = "", ln3 = "";
+
+                        switch (i) {
+                            case 0:
+                                ln0 = "░░░░░░░";
+                                ln1 = "░▀█░░░░";
+                                ln2 = "░░█░░░░";
+                                ln3 = "░▀▀▀░▀░";
+                                break;
+                            case 1:
+                                ln0 = "░░░░░░░";
+                                ln1 = "░▀▀▄░░░";
+                                ln2 = "░▄▀░░░░";
+                                ln3 = "░▀▀▀░▀░";
+                                break;
+                            case 2:
+                                ln0 = "░░░░░░░";
+                                ln1 = "░▀▀▄░░░";
+                                ln2 = "░░▀▄░░░";
+                                ln3 = "░▀▀░░▀░";
+                                break;
+                            case 3:
+                                ln0 = "░░░░░░░";
+                                ln1 = "░█░█░░░";
+                                ln2 = "░░▀█░░░";
+                                ln3 = "░░░▀░▀░";
+                                break;
+                            case 4:
+                                ln0 = "░░░░░░░";
+                                ln1 = "░█▀▀░░░";
+                                ln2 = "░▀▀█░░░";
+                                ln3 = "░▀▀░░▀░";
+                                break;
+                        }
+
+                        if (thisPlayer.getName() != null) {
+                            System.out.println(ln0 + " [Nome] " + thisPlayer.getName());
+
+                            String pattern = "yyyy MMM dd";
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+                            String dateStr = simpleDateFormat.format(thisPlayer.getDateTime());
+                            System.out.println(ln1 + " [Número] " + thisPlayer.getGuess());
+                            System.out.println(ln2 + " [Tentativas] " + thisPlayer.getAttempts() + "x");
+                            System.out.println(ln3 + " [Duração] " + thisPlayer.getDurationMs() + "ms");
+                            System.out.println(ln0 + " [Data] " + simpleDateFormat.format(thisPlayer.getDateTime()));
+
+                            if (i < 4)
+                                System.out.println(ln0);
+                        }
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
