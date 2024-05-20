@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
-public class App {
+public class Game {
     public static final String JSON_SRC = "resources/highscores.json";
 
     public static final int MAX_ATTEMPTS = 65;
@@ -120,6 +120,8 @@ public class App {
                 System.out.println("Parabéns, " + p.getName() + "!");
                 System.out.println("Você descobriu em " + p.getAttempts() + " tentativas!");
 
+                System.out.println();
+                System.out.println();
                 System.out.println();
                 System.out.println("*** T O P   H I G H S C O R E S ***");
                 System.out.println();
